@@ -90,24 +90,6 @@ void ShellSort(int a[],const int size){
 	int increment=3;
 	//set j-1(InsertionSort) to j-increment in ShellSort
 	while(increment>0){
-		for(i=0;i<size;i++){                //i start from 0 in shell
-			index=a[i];
-			j=i;
-			while(j>=increment && index<a[j-increment]){
-				a[j]=a[j-increment];
-				j=j-increment;
-			}
-		a[j]=index;  //place the curr element in its currect position
-		}
-		increment=increment/2;
-	}
-}
-/*
-void ShellSort(int a[],const int size){
-	int i,index,j;
-	int increment=3;
-	//set j-1(InsertionSort) to j-increment in ShellSort
-	while(increment>0){
 		for(i=increment;i<size;i++){                //i start from increment in shell
 			index=a[i];
 			j=i;
@@ -120,23 +102,7 @@ void ShellSort(int a[],const int size){
 		increment=increment/2;
 	}
 }
-*/
-
-/*
-void ShellSort(int a[],int size){
-	int gap,i,j,temp;
-	for(gap=size/2;gap>0;gap/=2){
-		for(i=gap;i<size;i++){
-			temp=a[i];
-			for(j=i;j>=gap && a[j-gap]>temp;j-=gap){
-				a[j]=a[j-gap];
-			}
-			a[j]=temp;
-		}
-	}
-}
-*/
-
+//////////////////////Heap Sort////////////////////////
 void BuildHeap(int a[],int size){
 	int i,element,s,f;
 	for(i=1;i<size;i++){
@@ -152,6 +118,7 @@ void BuildHeap(int a[],int size){
 	}
 
 }
+
 void HeapSort(int a[],int size){
 	int i,ivalue,s,f;
 	BuildHeap(a,size);
@@ -181,6 +148,7 @@ void HeapSort(int a[],int size){
 
 }
 
+//////////////////////Quick Sort////////////////////////
 void QuickSort(int a[],int left,int right){
 	int pivot,l_hold,r_hold,pt;
 	pivot=a[left];
@@ -212,11 +180,97 @@ void QuickSort(int a[],int left,int right){
 		QuickSort(a,pt+1,right);
 
 }
+//////////////////////Merge Sort////////////////////////
+void Merge(int a[],int temp[],int left,int mid,int right){
+     int i=left,j=mid,k=left;
+     while(i<mid && j<=right){
+	if(a[i]<=a[j])
+		temp[k++]=a[i++];
+	else
+		temp[k++]=a[j++];
+     }
+     while(i<mid){
+	temp[k++]=a[i++];
+     }
+     while(j<=right){
+	temp[k++]=a[j++];
+     }
+
+     for(i=left;i<=right;i++){       //temp se array a me
+	a[i] = temp[i];
+     }
+
+}
+void MergeSort(int a[],int temp[],int left,int right){
+	int mid;
+	if(right>left){
+		mid=(right+left)/2;
+		MergeSort(a,temp,left,mid);
+		MergeSort(a,temp,mid+1,right);
+			Merge(a,temp,left,mid+1,right);
+	}
+}
+
+//////////////////////Redix Sort////////////////////////
+
+int Max_In_Array(int a[],int size){
+	int i,max=0;
+	for(i=0;i<size;i++){
+	    if(a[i]>max){
+		max=a[i];
+	    }
+	}
+	return max;
+}
+int FindDigits(int no){
+	int r,count=0;
+	while(no>0){
+		no/=10;
+		count++;
+	}
+	return count;
+
+}
 
 
+void RedixSort(int a[],int size){
+	int i,j,k,digit,col,exp=1,index;
+	int Bucket[10][SIZE];  //Bucket array (0-9 digit ke liye)
+	int position[10]={0};  //Har bucket ke liye count track krna
+	int maxNo=Max_In_Array(a,size);
+	int noOfDigits=FindDigits(maxNo);
+	//Iterate digit place (unit,tens,hundreds,...)
+	for(i=1;i<=noOfDigits;i++){
+		for(j=0;j<size;j++){
+			position[j]=0;   //reset Bucket position
+		}
+		for(j=0;j<size;j++){
+		    digit=(a[j]/exp)%10;   //Current digit nikali
+		    Bucket[digit][position[digit]]=a[j];    //bucket me add kiya
+		    position[digit]++;
+		}
+		/*
+	       printf("Iteration for digit place %d:\n", i);
+	       for (j = 0; j < 10; j++) {
+			printf("Bucket %d: ", j);
+			for (k = 0; k < position[j]; k++) {
+				printf("%d ", Bucket[j][k]);
+				}
+			printf("\n");
+		}
+		printf("\n");
+		*/
+		k=0;
+		for(j=0;j<10;j++){
+			index=0;
+			while(index<position[j]){
+			a[k++]=Bucket[j][index++];  //Bucket se array me
+			}
+		}
+		exp*=10;// move to the next digit place
+	}
 
-
-
+}
 
 int LinearSearch(int a[],const int size,int value){
 	int i;
@@ -316,53 +370,14 @@ int InsertAtPosition(int a[],int size,int value,int pos){
 	return size;
 }
 
-int DeleteFront(int a[],int size){
-	int i;
-	if(size<=0){
+int DeleteEnd(int size){
+	if(size<1){
 		printf("\nERROR:Array is Empty");
 		return -1;
 	}
-	printf("\nFirst value of Array %d is deleted\n",a[0]);
-	for(i=0;i<size-1;i++){
-		a[i]=a[i+1];
-	}
-	size--;
+	size=size-1;
 	return size;
 }
-
-
-int DeleteEnd(int a[],int size){
-	if(size<=0){
-		printf("\nERROR:Array is Empty");
-		return -1;
-	}
-	printf("\nLast value of Array %d is deleted\n",a[size-1]);
-	size--;
-	return size;
-}
-
-int DeleteAtPosition(int a[],int size,int pos){
-	int i;
-	pos=pos-1;
-	if(pos>size-1){
-		printf("\nERROR:Invalid position!");
-		return -1;
-	}
-	else if(size<=0){
-		printf("\nERROR:Array is Empty");
-		return -1;
-	}
-	printf("\nElement %d is delete from position %d\n",a[pos],pos+1);
-
-	for(i=pos;i<size-1;i++){
-		a[i]=a[i+1];
-	}
-
-	size--;
-	return size;
-
-}
-
 
 
 
@@ -414,7 +429,7 @@ void DeleteMenu(){
 void main(){
 	int ch,sch,srch,size=0,value,pos,insertch,deletech;
 	int result;
-	int a[SIZE];
+	int a[SIZE],temp[SIZE];
     do{
 	clrscr();
 	Menu();
@@ -492,18 +507,13 @@ void main(){
 		switch(deletech)
 		{
 		case 1://Delete front
-		size=DeleteFront(a,size);
-		PrintArray(a,size);
+
 		break;
 		case 2://Delete End
-		size=DeleteEnd(a,size);
-		PrintArray(a,size);
+		size=DeleteEnd(size);
 		break;
 		case 3://Delete at the position
-		printf("\nEnter position : ");
-		scanf("%d",&pos);
-		size=DeleteAtPosition(a,size,pos);
-		PrintArray(a,size);
+
 		break;
 		case 4://Exit
 			clrscr();
@@ -564,7 +574,7 @@ void main(){
 				PrintArray(a,size);
 			}
 		break;
-		case 4://shell Sort
+		case 4://shell
 		if(size<1 || size>50)
 				{ printf("\nERROR:There is no Element in Array");
 				getch();
@@ -589,6 +599,7 @@ void main(){
 				HeapSort(a,size);
 				PrintArray(a,size);
 			}
+
 		break;
 		case 6://quick
 		if(size<1 || size>50)
@@ -599,13 +610,35 @@ void main(){
 				printf("\nArray Befor Sorting\n");
 				PrintArray(a,size);
 				printf("\nArray After Insertion Sorting\n");
-				QuickSort(a,size);
+				QuickSort(a,0,size);
 				PrintArray(a,size);
 			}
 		break;
 		case 7://merge
+		if(size<1 || size>50)
+				{ printf("\nERROR:There is no Element in Array");
+				getch();
+				}
+			else{
+				printf("\nArray Befor Sorting\n");
+				PrintArray(a,size);
+				printf("\nArray After Merge Sorting\n");
+				MergeSort(a,temp,0,size-1);
+				PrintArray(a,size);
+			}
 		break;
 		case 8://radix
+		if(size<1 || size>50)
+				{ printf("\nERROR:There is no Element in Array");
+				getch();
+				}
+			else{
+				printf("\nArray Befor Sorting\n");
+				PrintArray(a,size);
+				printf("\nArray After Redix  Sorting\n");
+				RedixSort(a,size);
+				PrintArray(a,size);
+			}
 		break;
 		case 9://Exit
 			clrscr();
