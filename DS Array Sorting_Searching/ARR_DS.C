@@ -90,10 +90,10 @@ void ShellSort(int a[],const int size){
 	int increment=3;
 	//set j-1(InsertionSort) to j-increment in ShellSort
 	while(increment>0){
-		for(i=increment;i<size;i++){                //i start from increment in shell
+		for(i=0;i<size;i++){                //i start from increment in shell
 			index=a[i];
 			j=i;
-			while(j>0 && index<a[j-increment]){
+			while(j>=increment && index<a[j-increment]){
 				a[j]=a[j-increment];
 				j=j-increment;
 			}
