@@ -234,43 +234,35 @@ int FindDigits(int no){
 
 
 void RedixSort(int a[],int size){
-	int i,j,k,digit,col,exp=1,index;
-	int Bucket[10][SIZE];  //Bucket array (0-9 digit ke liye)
-	int position[10]={0};  //Har bucket ke liye count track krna
+	int i,j,k,pos,exp=1,index;
+	int Bucket[10][50]={0};
+	int counter[10]={0};
 	int maxNo=Max_In_Array(a,size);
 	int noOfDigits=FindDigits(maxNo);
-	//Iterate digit place (unit,tens,hundreds,...)
+
 	for(i=1;i<=noOfDigits;i++){
+		for(j=0;j<10;j++){
+			counter[j]=0;
+		}
+
 		for(j=0;j<size;j++){
-			position[j]=0;   //reset Bucket position
+			pos=(a[j]/exp)%10;
+			Bucket[pos][counter[pos]++]=a[j];
 		}
-		for(j=0;j<size;j++){
-		    digit=(a[j]/exp)%10;   //Current digit nikali
-		    Bucket[digit][position[digit]]=a[j];    //bucket me add kiya
-		    position[digit]++;
-		}
-		/*
-	       printf("Iteration for digit place %d:\n", i);
-	       for (j = 0; j < 10; j++) {
-			printf("Bucket %d: ", j);
-			for (k = 0; k < position[j]; k++) {
-				printf("%d ", Bucket[j][k]);
-				}
-			printf("\n");
-		}
-		printf("\n");
-		*/
+
 		k=0;
 		for(j=0;j<10;j++){
-			index=0;
-			while(index<position[j]){
-			a[k++]=Bucket[j][index++];  //Bucket se array me
+			for( index=0;index<counter[j];index++) {
+				a[k++]=Bucket[j][index];
 			}
 		}
-		exp*=10;// move to the next digit place
+
+	      exp*=10;
 	}
 
+
 }
+
 
 int LinearSearch(int a[],const int size,int value){
 	int i;
