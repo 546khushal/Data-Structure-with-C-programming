@@ -40,7 +40,30 @@ void InsertAtEnd(Node **st,int value){
 	r->next=newNode;
 	printf("\nData Inserted Successfully at the End");
 }
+void SortedInsert(Node **st,int value){
+	 Node *tmp,*r;
+	 tmp= *st;
+	 r=malloc(sizeof(Node));
+	 r->data=value;
+	 if(*st==NULL || (*st)->data>value){
+		*st=r;
+		(*st)->next=tmp;
+	 }
+	 else{
+		while(tmp!=NULL){
+			if(tmp->data<=value){
+				if(tmp->next == NULL){
+					r->next=tmp->next;
+					tmp->next=r;
+					return;
+				}
+			}
+			tmp=tmp->next;
+		}
+	 }
 
+
+}
 void InsertAtPosition(Node **st,int value,int pos){
 	int i;
 	Node *newNode,*r;
@@ -286,6 +309,22 @@ void InsetionSort(Node **st){
 
 }
 
+
+void ReverseList(Node **st){
+	Node *prev=NULL,*next=NULL,*current=*st;
+	while(current!=NULL){
+		next=current->next;
+		current->next=prev;
+		prev=current;
+		current=next;
+
+	}
+       *st = prev;
+
+}
+
+
+
 void Display(Node *st){
 	if(st==NULL){
 		printf("\nThe Linked list is Empty");
@@ -322,11 +361,13 @@ void Display(Node *st){
 
 void Menu(){
 	printf("\n1. Add New Node");
-	printf("\n2. Delete Node");
-	printf("\n3. Search Element");
-	printf("\n4. Sorting Linked list");
-	printf("\n5. Display");
-	printf("\n6. Exit");
+	printf("\n2. Insert Sorted Element");
+	printf("\n3. Delete Node");
+	printf("\n4. Search Element");
+	printf("\n5. Sorting Linked list");
+	printf("\n6. Reverse List");
+	printf("\n7. Display");
+	printf("\n8. Exit");
 	printf("\n\nEnter Your Choice: ");
 }
 void AddMenu(){
@@ -406,7 +447,12 @@ void main(){
 			getch();
 			}while(ach!=4);
 			break;
-			case 2:  //Delete Node
+			case 2:
+				printf("\nEnter value: ");
+				scanf("%d",&value);
+				SortedInsert(&head,value);
+			break;
+			case 3:  //Delete Node
 			do{
 				clrscr();
 				DeleteMenu();
@@ -440,7 +486,7 @@ void main(){
 			getch();
 			}while(dch!=5);
 			break;
-			case 3://Searcing
+			case 4://Searcing
 			do{
 				clrscr();
 				SearchMenu();
@@ -482,7 +528,7 @@ void main(){
 
 
 			break;
-			case 4://Sorting
+			case 5://Sorting
 			do{
 				clrscr();
 				SortMenu();
@@ -524,10 +570,16 @@ void main(){
 			}while(sortch!=5);
 
 			break;
-			case 5://Display
+			case 6://reverse
+			printf("\nReverse List :\n");
+			ReverseList(&head);
+
 			Display(head);
 			break;
-			case 6:
+			case 7://Display
+			Display(head);
+			break;
+			case 8:
 				clrscr();
 				gotoxy(35,12);
 				printf("Thank You Boss!");
@@ -536,6 +588,6 @@ void main(){
 			printf("Invalid Choice Boss ! Please enter right Choice");
 		}
 	       getch();
-	}while(mch!=6);
+	}while(mch!=8);
 
 }
