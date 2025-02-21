@@ -154,6 +154,137 @@ void DeleteAtValue(Node **st,int value){
 	}
 	printf("\nEntered value %d is not present",value);
 }
+//*****************Linear Search******************
+int LinearSearch(Node *st,int value){
+	Node *tmp=st;
+	int position=1;
+	while(tmp != NULL){
+		if(tmp->data==value){
+			return position;
+		}
+		tmp=tmp->next;
+		position++;
+
+	}
+	return -1;
+}
+
+//*****************Binary Search******************
+int GetSize(Node *st){
+	int size=0;
+	Node *temp =st;
+	while(temp != NULL){
+		size++;
+		temp=temp->next;
+	}
+	return size;
+}
+Node *GetNodeAt(Node *st,int pos){
+	int i=0;
+	Node *temp=st;
+	while(temp != NULL && i<pos){
+		temp=temp->next;
+		i++;
+	}
+	return temp;
+}
+int BinarySearch(Node *st,int value){
+	Node *midNode;
+	int size=GetSize(st);
+	int low=0,high=size-1,mid;
+	if(st==NULL){
+		printf("\nLinked List is Empty");
+	}
+	while(low<=high){
+		mid=low+(high-low)/2;
+		midNode=GetNodeAt(st,mid);
+		if(midNode->data==value)
+			return mid+1;
+		else if(midNode->data<value)
+			low=mid+1;
+		else
+			high=mid-1;
+	}
+	return -1;
+
+}
+
+//*****************Bubble Sort******************
+void swap(Node *a,Node *b){
+	int temp=a->data;
+	a->data=b->data;
+	b->data=temp;
+}
+void BubbleSort(Node **st){
+	   int size=GetSize(*st);
+	   int i,j;
+	   Node *current;
+	   if(*st==NULL || size < 2){
+		return;
+	   }
+	   for(i=0;i<size-1;i++){
+		  current=*st;
+		  for(j=0;j<size-i-1;j++){
+			if(current->data > current->next->data){
+			swap(current,current->next);
+			}
+			current=current->next;
+
+		  }
+	   }
+}
+void SelectionSort(Node **st){
+	int size=GetSize(*st); //while use kiya to size ki need nhi NULL tk jana hai
+	int i,j;
+	Node *current=*st;
+	Node *min,*temp;
+	if(*st==NULL || size < 2){
+		return;
+	   }
+	for(i=0;i<size-1;i++){                  //while(current != NULL)
+		min=current;
+		temp=current->next;
+		for(j=i+1;j<size;j++){            //while(temp!=NULL)
+			if(temp->data < min->data){
+				min=temp;
+			}
+			temp=temp->next;
+		}
+		if(min!= current){
+		swap(current,min);
+		}
+		current=current->next;
+	}
+}
+void InsetionSort(Node **st){
+	Node *sorted=NULL;
+	Node *current=*st;
+	Node *next,*temp;
+	if((*st)==NULL || (*st)->next==NULL){
+	return;
+	}
+	while(current!=NULL){
+	       next=current->next;
+	       if(sorted==NULL || sorted->data >= current->data){
+			//Insert at the beginning of the sorted list
+			current->next=sorted;
+			sorted=current;
+	       }else{
+		temp=sorted;
+		while(temp->next !=NULL && temp->next->data < current->data){
+			temp=temp->next;
+		}
+		//insert the current node after temp
+		current->next = temp->next;
+		temp->next =current;
+	       }
+	  current=next;//move to the next node in th original list
+	 }
+	  *st=sorted; //update the head of the list to point the sorted list
+
+
+
+}
 
 void Display(Node *st){
 	if(st==NULL){
@@ -192,9 +323,10 @@ void Display(Node *st){
 void Menu(){
 	printf("\n1. Add New Node");
 	printf("\n2. Delete Node");
-	printf("\n3. ");
-	printf("\n4. Display");
-	printf("\n5. Exit");
+	printf("\n3. Search Element");
+	printf("\n4. Sorting Linked list");
+	printf("\n5. Display");
+	printf("\n6. Exit");
 	printf("\n\nEnter Your Choice: ");
 }
 void AddMenu(){
@@ -214,11 +346,25 @@ void DeleteMenu(){
 	printf("\n\nEnter Your Choice: ");
 
 }
+void SearchMenu(){
+	printf("\n1. Linear Search");
+	printf("\n2. Binary Search");
+	printf("\n3. Exit");
+	printf("\n\nEnter Your Choice: ");
+}
 
+void SortMenu(){
+	printf("\n1. Bubble Sort");
+	printf("\n2. Selection Sort");
+	printf("\n3. Insetion Sort");
+
+	printf("\n5. Exit");
+	printf("\n\nEnter Your Choice: ");
+}
 
 
 void main(){
-	int mch,ach,dch,value,pos;
+	int mch,ach,dch,searchch,sortch,value,pos;
 	Node *head=NULL;
 	do{
 		clrscr();
@@ -294,12 +440,94 @@ void main(){
 			getch();
 			}while(dch!=5);
 			break;
-			case 3:
+			case 3://Searcing
+			do{
+				clrscr();
+				SearchMenu();
+				scanf("%d",&searchch);
+				switch(searchch){
+				case 1://Linear search
+					printf("\nEnter value to search: ");
+					scanf("%d",&value);
+					pos=LinearSearch(head,value);
+					if(pos != -1){
+						printf("\nElement %d found at position: %d",value,pos);
+					}
+					else{
+						printf("\nElement %d not found",value);
+					}
+				break;
+				case 2://Binary Search
+					printf("\nEnter value to search: ");
+					scanf("%d",&value);
+					BubbleSort(&head);
+					pos=BinarySearch(head,value);
+					if(pos != -1){
+						printf("\nElement %d found at position: %d",value,pos);
+					}
+					else{
+						printf("\nElement %d not found",value);
+					}
+				break;
+				case 3:
+				clrscr();
+				gotoxy(35,12);
+				printf("Thank You Boss!");
+				break;
+				default:
+				printf("Invalid Choice Boss ! Please enter right Choice");
+				}
+			getch();
+			}while(searchch!=3);
+
+
 			break;
-			case 4://Display
+			case 4://Sorting
+			do{
+				clrscr();
+				SortMenu();
+				scanf("%d",&sortch);
+				switch(sortch){
+				case 1://BubbleSort
+				printf("\nBefore Sort:\n");
+				Display(head);
+
+				BubbleSort(&head);
+				printf("\nAfter Sort:\n");
+				Display(head);
+				break;
+				case 2:
+				printf("\nBefore Sort:\n");
+				Display(head);
+
+				SelectionSort(&head);
+				printf("\nAfter Sort:\n");
+				Display(head);
+				break;
+				case 3:
+				printf("\nBefore Sort:\n");
+				Display(head);
+
+				InsetionSort(&head);
+				printf("\nAfter Sort:\n");
+				Display(head);
+				break;
+				case 5:
+				clrscr();
+				gotoxy(35,12);
+				printf("Thank You Boss!");
+				break;
+				default:
+				printf("Invalid Choice Boss ! Please enter right Choice");
+				}
+			getch();
+			}while(sortch!=5);
+
+			break;
+			case 5://Display
 			Display(head);
 			break;
-			case 5:
+			case 6:
 				clrscr();
 				gotoxy(35,12);
 				printf("Thank You Boss!");
@@ -308,6 +536,6 @@ void main(){
 			printf("Invalid Choice Boss ! Please enter right Choice");
 		}
 	       getch();
-	}while(mch!=5);
+	}while(mch!=6);
 
 }
