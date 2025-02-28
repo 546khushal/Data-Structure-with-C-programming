@@ -6,7 +6,7 @@ typedef struct LinkList{
 	struct LinkList *next;
 }Node;
 void InsertAtBegin(Node **st,int value){
-	Node *newNode,*r;
+	Node *newNode;
 	newNode = malloc(sizeof (Node));
 	if(newNode==NULL){
 		printf("\nMemory Allocation Fail!");
@@ -279,6 +279,7 @@ void SelectionSort(Node **st){
 		current=current->next;
 	}
 }
+/*
 void InsetionSort(Node **st){
 	Node *sorted=NULL;
 	Node *current=*st;
@@ -309,7 +310,7 @@ void InsetionSort(Node **st){
 
 }
 
-
+*/
 void ReverseList(Node **st){
 	Node *prev=NULL,*next=NULL,*current=*st;
 	while(current!=NULL){
@@ -551,12 +552,12 @@ void main(){
 				Display(head);
 				break;
 				case 3:
-				printf("\nBefore Sort:\n");
-				Display(head);
+				// printf("\nBefore Sort:\n");
+				// Display(head);
 
-				InsetionSort(&head);
-				printf("\nAfter Sort:\n");
-				Display(head);
+				// InsetionSort(&head);
+				// printf("\nAfter Sort:\n");
+				// Display(head);
 				break;
 				case 5:
 				clrscr();
