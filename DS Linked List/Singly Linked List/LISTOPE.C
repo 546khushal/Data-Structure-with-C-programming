@@ -50,7 +50,7 @@ void UnionList(Node *p,Node *q,Node **result){
 			}
 			tmp=tmp->next;
 		}
-		if(!flag){
+		if(!flag){   
 			Append(result,q->data);
 		}
 		q=q->next;
