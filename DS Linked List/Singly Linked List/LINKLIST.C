@@ -139,7 +139,7 @@ void DeleteAtPosition(Node **st,int pos){
 		return;
 	}
 	current=*st;
-	for(i=1; i< pos-1 && (*st)!=NULL ;i++){
+	for(i=1; i< pos-1 && current!=NULL ;i++){
 		current=current->next;
 	}
 	if(current==NULL || current->next==NULL){
